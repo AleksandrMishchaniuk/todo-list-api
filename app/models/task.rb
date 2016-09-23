@@ -28,11 +28,39 @@ class Task < ApplicationRecord
 
   before_create :set_max_priority
 
+  def up_priority
+    return false if priority == max_priority
+    exchange_priority(1)
+  end
+
+  def down_priority
+    return false if priority == min_priority
+    exchange_priority(-1)
+  end
+
   protected
 
   def set_max_priority
-    max_priority = self.class.belongs_to_project(self.project_id).maximum(:priority)
-    self.priority = max_priority.to_i + 1
+    self.priority = max_priority + 1
+  end
+
+  def max_priority
+    project.tasks.maximum(:priority).to_i
+  end
+
+  def min_priority
+    project.tasks.minimum(:priority).to_i
+  end
+
+  def exchange_priority(i)
+    tasks = self.project.tasks.order('priority ASC')
+    other_task = tasks[ tasks.find_index{ |item| item == self } + i ]
+    self.priority, other_task.priority = other_task.priority, self.priority
+    Task.transaction do
+      self.save!
+      other_task.save!
+    end
+    true
   end
 
 end
