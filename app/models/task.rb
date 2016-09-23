@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  include AASM
 
   belongs_to :project
   has_many :comments
@@ -8,5 +9,18 @@ class Task < ApplicationRecord
   validates :priority, numericality: { greater_than: 0, only_integer: true }
   validates :state, length: { in: 1..64 }
   validates :deadline, date: true
+
+  aasm column: 'state' do
+    state :in_progress, initial: true
+    state :done
+
+    event :do do
+      transitions from: :in_progress, to: :done
+    end
+
+    event :cancel do
+      transitions from: :done, to: :in_progress
+    end
+  end
 
 end

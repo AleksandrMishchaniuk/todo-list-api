@@ -24,6 +24,8 @@ gem 'figaro', '~> 1.1', '>= 1.1.1'
 
 gem 'devise', '~> 4.2'
 
+gem 'aasm', '~> 4.11', '>= 4.11.1'
+
 gem 'date_validator', '~> 0.9.0'
 
 group :development, :test do
