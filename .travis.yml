@@ -1,6 +1,7 @@
 language: ruby
 install:
   - rvm install 2.3.0
+  - gem install rake
 rvm:
   - 2.3.0
 before_script:
