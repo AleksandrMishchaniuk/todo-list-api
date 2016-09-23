@@ -83,5 +83,3 @@ test:
 production:
   <<: *default
   database: todo-list-api_production
-  username: todo-list-api
-  password: <%= ENV['TODO-LIST-API_DATABASE_PASSWORD'] %>
